@@ -182,7 +182,7 @@ export default function SearchContainer() {
                             sx={{ zIndex: 2, flex: isSearching ? '8' : '12', background: "#fff", borderRadius: '16px', width: "80%", my: 2, mx: 2 }}
                             onChange={(e) => setSearchText(e.target.value)}
                         />
-                        <Box sx={{ zIndex: 2, my: isSearching ? 0 : 2, p: 0, display: 'flex', flex: isSearching ? '4' : '12', width: '100%', justifyContent: isSearching ? 'start' : 'center', alignItems: 'center' }}>
+                        <Box sx={{ zIndex: 2, my: isSearching ? 0 : 2, p: 0, display: 'flex', flex: isSearching ? '4' : '12', width: '100%', justifyContent: isSearching ? 'start' : 'center', alignItems: 'center',px:2 }}>
 
                             <Autocomplete
                                 id="three-options-autocomplete"
