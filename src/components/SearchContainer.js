@@ -69,12 +69,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 export default function SearchContainer() {
     // const classes = useStyles();
-    const inputStyle = {
-        fontSize: '18px', // Adjust the font size as needed
-        padding: '10px', // Adjust the padding as needed
-        width: '100%', // Adjust the width as needed
-        borderRadius: '16px'
-    };
+
 
     const options = [{ label: 'Knowledge Graph', value: 'knowledge-graph' }, { label: 'Table Data', value: 'table-data' }, { label: 'Snowflake Data', value: 'snowflake-data' }];
 
@@ -85,7 +80,17 @@ export default function SearchContainer() {
     const [selectedValue, setSelectedValue] = useState(null);
     const [queryResData, setQueryResData] = useState(null);
     const [isSourceSelected, setisSourceSelected] = useState(false);
-
+    const inputStyle = isSearching ? {
+        fontSize: '16px', // Adjust the font size as needed
+        padding: '4px', // Adjust the padding as needed
+        width: '100%', // Adjust the width as needed
+        borderRadius: '8px'
+    } : {
+        fontSize: '18px', // Adjust the font size as needed
+        padding: '10px', // Adjust the padding as needed
+        width: '100%', // Adjust the width as needed
+        borderRadius: '16px'
+    };
     const handleButtonClick = (resSelected) => {
         setisSourceSelected(resSelected)
     }
@@ -155,12 +160,12 @@ export default function SearchContainer() {
             </ThemeProvider>
 
             <Box sx={{ display: 'flex', justifyContent: 'center', m: 2, p: 0 }}>
-                <Box sx={{ flex: leftPanelOpen ? 3 : 0, display: leftPanelOpen ? 'flex' : 'none', justifyContent: 'center', pr: 2 }}>
+                <Box sx={{ flex: leftPanelOpen ? 3 : 0, display: leftPanelOpen ? 'flex' : 'none', justifyContent: 'center', pr: leftPanelOpen ? 2 : 0 }}>
                     <Box sx={{ width: '100%', border: '1px solid #ccc' }}></Box>
                 </Box>
 
-                <Box sx={{ width: '100%', borderRadius: 2, p: isSearching ? 0 : 2, flex: leftPanelOpen ? 9 : 12, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                    <Box className="search-container" sx={{ width: '100%', borderRadius: 2, p: isSearching ? 0 : 2, flex: 12, display: 'flex', flexDirection: isSearching ? 'row' : 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <Box sx={{ width: '100%', borderRadius: 2, p: isSearching ? 0 : 2, flex: leftPanelOpen ? 9 : 12, display: 'flex', flexDirection: 'column' }}>
+                    <Box className="search-container" sx={{ width: '100%', borderRadius: 2, p: 0, flex: 12, display: 'flex', flexDirection: isSearching ? 'row' : 'column', justifyContent: 'center', alignItems: 'center' }}>
                         {!isSearching && <Typography variant="h2" sx={{
                             textAlign: "center",
                             color: '#fff',
@@ -179,10 +184,10 @@ export default function SearchContainer() {
                             }}
                             maxRows={5}
                             onClick={handleOpenMenu}
-                            sx={{ zIndex: 2, flex: isSearching ? '8' : '12', background: "#fff", borderRadius: '16px', width: "80%", my: 2, mx: 2 }}
+                            sx={{ zIndex: 2, flex: isSearching ? '8' : '12', background: "#fff", borderRadius: isSearching ? '8px' : '16px', width: "80%", my: 2, mx: 2 }}
                             onChange={(e) => setSearchText(e.target.value)}
                         />
-                        <Box sx={{ zIndex: 2, my: isSearching ? 0 : 2, p: 0, display: 'flex', flex: isSearching ? '4' : '12', width: '100%', justifyContent: isSearching ? 'start' : 'center', alignItems: 'center',px:2 }}>
+                        <Box sx={{ zIndex: 2, my: isSearching ? 0 : 2, p: 0, display: 'flex', flex: isSearching ? '4' : '12', width: '100%', justifyContent: isSearching ? 'start' : 'center', alignItems: 'center', pr: 2 }}>
 
                             <Autocomplete
                                 id="three-options-autocomplete"
@@ -222,7 +227,7 @@ export default function SearchContainer() {
                         {!isSearching && <img className='image-container-left' src="/dbms.png" width="220" height="201" alt='img'></img>}
                         {!isSearching && <img className='image-container-right' src="/dbms.png" width="300" height="271" alt='img'></img>}
                     </Box>
-                    {isSearching && isLoading && <Box sx={{ width: '100%', p: 2 }}>
+                    {(isSearching && isLoading) && <Box sx={{ width: '100%', p: 2, px: 0 }}>
                         <Skeleton variant="rectangular" animation="pulse" sx={{ mb: 2, width: '100%', background: '#E1EADD', borderRadius: '8px' }} height={200} />
                         {/* <Skeleton variant="rectangular" animation="pulse" sx={{ ml: 5, mb: 2, width: '80%', background: '#E7DDEA', borderRadius: '8px' }} height={200} /> */}
                         {/* <Skeleton variant="rectangular" animation="pulse" sx={{ ml: 5, mb: 2, width: '80%', background: '#EADDDF', borderRadius: '8px' }} height={200} /> */}
@@ -232,8 +237,8 @@ export default function SearchContainer() {
                             {/* <Box>{queryResData.query_response}</Box> */}
                             <Card sx={{ mt: 4 }}>
                                 <CardActions>
-                                    <Button variant={!isSourceSelected ? 'contained' : 'outlined'} size="large" onClick={() => handleButtonClick(false)} sx={{ textTransform: 'unset' }}>Response</Button>
-                                    <Button variant={isSourceSelected ? 'contained' : 'outlined'} size="large" onClick={() => handleButtonClick(true)} sx={{ textTransform: 'unset' }}>Source</Button>
+                                    <Button size="large" onClick={() => handleButtonClick(false)} sx={{ textTransform: 'unset', textDecoration: !isSourceSelected ? 'underline' : '', fontSize: '16px', color: !isSourceSelected ? '' : '#ccc' }}>Response</Button>
+                                    <Button size="large" onClick={() => handleButtonClick(true)} sx={{ textTransform: 'unset', textDecoration: isSourceSelected ? 'underline' : '', fontSize: '16px', color: isSourceSelected ? '' : '#ccc' }}>Source</Button>
                                 </CardActions>
                                 {!isSourceSelected && <CardContent>
                                     <Typography gutterBottom variant="h5" component="div">
@@ -248,10 +253,10 @@ export default function SearchContainer() {
                                 </CardContent>}
                                 {isSourceSelected && <CardContent>
                                     <Typography gutterBottom variant="h5" component="div">
-                                       References:
+                                        References:
                                     </Typography>
                                     <Typography variant="h6" sx={{ fontWeight: 400, color: '#000', opacity: 0.8 }}>
-                                      Data sources ({queryResData.response_id})
+                                        Data sources ({queryResData.response_id})
                                     </Typography>
                                     <Typography variant="h6" sx={{ fontWeight: 300, color: '#000', opacity: 0.5 }} >
                                         {/* {queryResData.source_data} */}
