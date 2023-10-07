@@ -11,3 +11,81 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+@keyframes slideBackground {
+  0% {
+      background-position: 0 0;
+  }
+  100% {
+      background-position: 100% 0; /* Adjust as needed */
+  }
+}
+
+/* Apply the animation to an element */
+.abc{
+  background-image: url("network.png") !important;
+  box-shadow: none;
+  animation: slideBackground 20s linear infinite !important;
+}
+
+.search-container {
+  position: relative;
+  background: linear-gradient(140deg, #5e34e7, #6DC7B1 70.71%),
+  radial-gradient( #34e755, #5e34e7 70.71%),
+  radial-gradient( #5e34e7, #6DC7B1);
+  background-size: 600% 300%;
+
+  -webkit-animation: searchContainer 26s ease infinite;
+  -moz-animation: searchContainer 26s ease infinite;
+  animation: searchContainer 26s ease infinite;
+}
+
+.image-container-right,.image-container-left{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  opacity: 0.2;
+  /* align-items: center; */
+}
+.image-container-left{
+  left:0;
+  bottom: 0;
+  scale:0.7;
+  animation: searchImg 10s ease-in-out infinite;
+}
+.image-container-right{
+  right:0;
+  top: 0;
+  scale:0.7;
+  animation: searchImg 10s ease-in-out infinite;
+}
+
+@-webkit-keyframes searchContainer {
+  0%{background-position:9% 0%}
+  50%{background-position:92% 100%}
+  100%{background-position:9% 0%}
+}
+@-moz-keyframes searchContainer {
+  0%{background-position:9% 0%}
+  50%{background-position:92% 100%}
+  100%{background-position:9% 0%}
+}
+@keyframes searchContainer {
+  0%{background-position:9% 0%}
+  50%{background-position:92% 100%}
+  100%{background-position:9% 0%}
+}
+
+@-webkit-keyframes searchImg {
+  0%, 100% {scale:0.5;}
+  50%{scale:0.7;} 
+}
+@-moz-keyframes searchImg {
+  0%, 100% {scale:0.5;}
+  50%{scale:0.7;} 
+}
+@keyframes searchImg {
+  0%, 100% {scale:0.5;}
+  50%{scale:0.7;} 
+}
