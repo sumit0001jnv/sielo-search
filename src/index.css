@@ -9,6 +9,30 @@ body {
   height: 100%;
   background-color: #f5fcff;
 }
+*::-webkit-scrollbar {
+  width: 3px !important;
+  height: 3px !important;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgb(179, 177, 177) !important;
+  border-radius: 3px !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgb(136, 136, 136) !important;
+  border-radius: 3px !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgb(100, 100, 100) !important;
+  border-radius: 3px !important;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: rgb(68, 68, 68) !important;
+  border-radius: 3px
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
