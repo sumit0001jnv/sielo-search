@@ -6,11 +6,15 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import OutlinedInput from '@mui/material/OutlinedInput';
+
 import MoreIcon from '@mui/icons-material/MoreVert';
+import SendIcon from '@mui/icons-material/Send';
 import { createTheme, ThemeProvider } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { deepOrange } from '@mui/material/colors';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -99,7 +103,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 export default function SearchContainer() {
     // const classes = useStyles();
-
+    const textFieldRef = useRef(null);
     const [login, setlogin] = useState(true);
     const options = [{ label: 'Knowledge Graph', value: 'knowledge-graph' }, { label: 'Table Data', value: 'table-data' }, { label: 'Snowflake Data', value: 'snowflake-data' }];
 
@@ -115,6 +119,11 @@ export default function SearchContainer() {
         width: '100%', // Adjust the width as needed
         borderRadius: '8px'
     };
+    const focusTextField = () => {
+        if (textFieldRef.current) {
+          textFieldRef.current.focus();
+        }
+      };
     const handleButtonClick = (resSelected) => {
         setisSourceSelected(resSelected)
     }
@@ -147,7 +156,8 @@ export default function SearchContainer() {
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleOpenMenu = (event) => {
-        setAnchorEl(event.currentTarget);
+
+        // setAnchorEl(event.currentTarget);
     };
 
     const handleCloseMenu = () => {
@@ -272,15 +282,15 @@ export default function SearchContainer() {
                 </AppBar>
             </ThemeProvider>
 
-            <Box sx={{ display: 'flex', m: 2, p: 0, alignItems: 'start' }}>
+            <Box sx={{ display: 'flex', my: 2, mx: 1, p: 0, alignItems: 'start' }}>
                 <Box sx={{ flex: leftPanelOpen ? 3 : 0, display: leftPanelOpen ? 'flex' : '', justifyContent: 'center', pr: leftPanelOpen ? 1 : 0 }}>
-                    <Box sx={{ width:leftPanelOpen? '100%':'', minHeight:leftPanelOpen?'calc(100vh - 102px)':'', boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.2);', backgroundColor: "#fff", borderRadius: leftPanelOpen ? 1 : 0 }}>
+                    <Box sx={{ width: leftPanelOpen ? '100%' : '', minHeight: leftPanelOpen ? 'calc(100vh - 102px)' : '', boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.2);', backgroundColor: "#fff", borderRadius: leftPanelOpen ? 1 : 0 }}>
                         <IconButton
                             edge="start"
                             color="inherit"
                             aria-label="open drawer"
                             onClick={toggleLeftPanel}
-                            style={{padding:leftPanelOpen?'8px':'',marginLeft:'4px'}}
+                            style={{ padding: leftPanelOpen ? '8px' : '', marginLeft: '4px' }}
 
                         >
                             <MenuIcon sx={{ fontSize: 30 }} />
@@ -291,18 +301,20 @@ export default function SearchContainer() {
                 <Box sx={{ width: '100%', borderRadius: 2, flex: leftPanelOpen ? 9 : 12, display: 'flex', flexDirection: 'column', padding: '0' }}>
                     <form onSubmit={handleSearch}>
                         <Box className="search-container" sx={{ width: '100%', flex: 12, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.2);', backgroundColor: "#fff" }}>
-                            <TextField
+                            <OutlinedInput
                                 id="search-box" margin="normal"
                                 placeholder="Search"
                                 autoComplete="off"
+                                inputRef={textFieldRef}
+                                endAdornment={<InputAdornment position="end"><SearchIcon sx={{ fontSize: 30, color: '#797EF6' }} /></InputAdornment>}
                                 variant="outlined"
                                 value={searchText}
-                                InputProps={{
-                                    style: inputStyle,
-                                }}
+                                // InputProps={{
+                                //     style: inputStyle,
+                                // }}
                                 maxRows={5}
                                 onClick={handleOpenMenu}
-                                sx={{ zIndex: 2, flex: '8', background: "#fff", borderRadius: '8px', width: "80%", my: 0, ml: 2 }}
+                                sx={{ zIndex: 2, flex: '8', fontSize: '20px', background: "#fff", borderRadius: '8px', width: "80%", my: 0, ml: 2 }}
                                 onChange={(e) => setSearchText(e.target.value)}
                                 onKeyDown={handleSearchKeyPress}
                             />
@@ -339,7 +351,9 @@ export default function SearchContainer() {
                                         color="primary"
                                         onClick={handleSearch}
                                         sx={{ borderRadius: '8px', p: 2, px: 3 }}
+                                        disableElevation
                                     >
+                                        {/* <SendIcon sx={{mr:1}}></SendIcon> */}
                                         Search
                                     </Button>
                                 </ThemeProvider>
@@ -353,10 +367,16 @@ export default function SearchContainer() {
                         {/* <Skeleton variant="rectangular" animation="pulse" sx={{ ml: 5, mb: 2, width: '80%', background: '#E7DDEA', borderRadius: '8px' }} height={200} /> */}
                         {/* <Skeleton variant="rectangular" animation="pulse" sx={{ ml: 5, mb: 2, width: '80%', background: '#EADDDF', borderRadius: '8px' }} height={200} /> */}
                     </Box>}
+                    {!isLoading && !queryResData && <>
+                        <Box  sx={{ width: '100%',display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',height:'calc(100vh - 240px)' }}>
+                            <img onClick={focusTextField} className='image-container-left' src="/dbms.png" width="220" height="201" alt='img'></img>
+                            <Typography onClick={focusTextField} sx={{color:'#000',opacity:0.5,fontSize:'20px'}}>Try Search on top</Typography>
+                        </Box>
+                    </>}
                     {!isLoading && queryResData &&
                         <>
                             {/* <Box>{queryResData.query_response}</Box> */}
-                            <Card sx={{ mt: 1, background: '#CEC2EB', boxShadow: 'unset' }}>
+                            <Card sx={{ mt: 1, background: '#FED8B1', boxShadow: 'unset' }}>
                                 <CardActions>
                                     <Button size="large" onClick={() => handleButtonClick(false)} sx={{ ...tabBtnStyle(false) }}>Response</Button>
                                     <Button size="large" onClick={() => handleButtonClick(true)} sx={{ ...tabBtnStyle(true) }}>Source</Button>

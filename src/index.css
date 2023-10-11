@@ -32,36 +32,10 @@ code {
   animation: slideBackground 20s linear infinite !important;
 }
 
-.search-container {
-  /* position: relative; */
-  /* background: linear-gradient(140deg, #5e34e7, #6DC7B1 70.71%),
-  radial-gradient( #34e755, #5e34e7 70.71%),
-  radial-gradient( #5e34e7, #6DC7B1); */
-  /* background-size: 600% 300%; */
-
-  /* -webkit-animation: searchContainer 26s ease infinite;
-  -moz-animation: searchContainer 26s ease infinite;
-  animation: searchContainer 26s ease infinite; */
-}
-
-.image-container-right,.image-container-left{
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  opacity: 0.2;
-  /* align-items: center; */
-}
 .image-container-left{
-  left:0;
-  bottom: 0;
-  scale:0.7;
-  animation: searchImg 10s ease-in-out infinite;
-}
-.image-container-right{
-  right:0;
-  top: 0;
-  scale:0.7;
-  animation: searchImg 10s ease-in-out infinite;
+  scale:0.9;
+  opacity: 0.5;
+  /* animation: searchImg 10s ease-in-out infinite; */
 }
 
 @-webkit-keyframes searchContainer {
