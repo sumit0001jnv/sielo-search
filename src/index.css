@@ -90,3 +90,22 @@ code {
   0%, 100% {scale:0.5;}
   50%{scale:0.7;} 
 }
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-container {
+  display: flex;
+  padding: 16px 8px;
+  align-items: flex-start;
+}
+
+.content {
+  flex: 1;
+}
+
+/* .MuiPaper-root{
+  top: 86px !important;
+} */
