@@ -410,6 +410,7 @@ export default function ResponsiveSearchContainerV2() {
                                     //     style: inputStyle,
                                     // }}
                                     maxRows={5}
+                                    multiline
                                     onClick={handleOpenMenu}
                                     sx={{ zIndex: 2, flex: isMobile ? 12 : 8, fontSize: '20px', background: "#fff", borderRadius: '8px', width: isMobile ? "100%" : "80%", my: 0, mr: isMobile ? 0 : 1 }}
                                     onChange={(e) => setSearchText(e.target.value)}
