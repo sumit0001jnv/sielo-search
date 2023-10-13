@@ -124,6 +124,7 @@ const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open, isMobile }) => ({
     flexGrow: 1,
+    backgroundColor: 'aliceblue',
     padding: theme.spacing(isMobile ? 1 : 2),
     paddingTop: theme.spacing(3),
     transition: theme.transitions.create('margin', {
@@ -192,6 +193,7 @@ export default function ResponsiveSearchContainerV2() {
         width: '100%', // Adjust the width as needed
         borderRadius: '8px'
     };
+
     const focusTextField = () => {
         if (textFieldRef.current) {
             textFieldRef.current.focus();
@@ -220,6 +222,14 @@ export default function ResponsiveSearchContainerV2() {
         }
 
     };
+
+    const searchCard = (text) => {
+        setSearchText(text);
+        setTimeout(() => {
+            handleSearch();
+        })
+
+    }
 
     const handleSelectChange = (event, newValue) => {
         setSelectedValue(newValue);
@@ -293,9 +303,9 @@ export default function ResponsiveSearchContainerV2() {
 
     const tabBtnStyle = (isSource) => {
         if ((isSource && isSourceSelected) || (!isSource && !isSourceSelected)) {
-            return { textDecoration: 'underline', fontSize: '14px', color: '#FE5000', opacity: '', 'text-underline-offset': '4px', fontWeight: 600 };
+            return { textDecoration: 'underline', fontSize: '14px', color: '#000061', opacity: '', 'text-underline-offset': '4px', fontWeight: 600 };
         } else {
-            return { textDecoration: '', fontSize: '14px', color: '#000', opacity: '0.4', 'text-underline-offset': '4px', fontWeight: 600 };
+            return { textDecoration: '', fontSize: '14px', color: '#000', opacity: '0.6', 'text-underline-offset': '4px', fontWeight: 600 };
         }
 
     }
@@ -461,14 +471,34 @@ export default function ResponsiveSearchContainerV2() {
                             <Skeleton variant="rectangular" animation="pulse" sx={{ mb: 2, width: '100%', background: '#DBF3FA', opacity: 0.6, borderRadius: '8px' }} height={200} />
                         </Box>}
                         {!isLoading && !queryResData && <>
-                            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: 'calc(100vh - 240px)' }}>
+                            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: 'calc(100vh - 240px)' }}>
+                                <Grid container sx={{ width: '100%', display: 'flex', rowGap: "8px", p: 2 }}>
+                                    <Grid item xs="12" sm="4" md="4">
+                                        <Box onClick={() => searchCard('Summarize the data')} className="sample-card" sx={{ display: 'flex', flexDirection: 'column', p: 2, minHeight: '120px', borderRadius: '8px', mr: 2 }}>
+                                            <Box sx={{ fontSize: '1.25rem', pb: 2 }}>Summarize the data</Box>
+                                            <Box sx={{ opacity: 0.5 }}>To get short summary </Box>
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs="12" sm="4" md="4">
+                                        <Box onClick={() => searchCard('List all the medicines')} className="sample-card" sx={{ display: 'flex', flexDirection: 'column', p: 2, minHeight: '120px', borderRadius: '8px', mr: 2 }}>
+                                            <Box sx={{ fontSize: '1.25rem', pb: 2 }}>List all the medicines</Box>
+                                            <Box sx={{ opacity: 0.5 }}>Query to listout all the medicines</Box>
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs="12" sm="4" md="4">
+                                        <Box onClick={() => searchCard('Find all the proteins')} className="sample-card" sx={{ display: 'flex', flexDirection: 'column', p: 2, minHeight: '120px', borderRadius: '8px', mr: 2 }}>
+                                            <Box sx={{ fontSize: '1.25rem', pb: 2 }}>Find all the proteins</Box>
+                                            <Box sx={{ opacity: 0.5 }}>Query to listout all the proteins</Box>
+                                        </Box>
+                                    </Grid>
+                                </Grid>
                                 <img onClick={focusTextField} className='image-container-left' src="/dbms.png" width="220" height="201" alt='img'></img>
                                 <Typography onClick={focusTextField} sx={{ color: '#000', opacity: 0.5, fontSize: '20px' }}>Try Search on top</Typography>
                             </Box>
                         </>}
                         {!isLoading && queryResData &&
                             <>
-                                <Card sx={{ mt: 1, background: '#FED8B1', boxShadow: 'unset' }}>
+                                <Card sx={{ mt: 1, background: '#7AD7F0', boxShadow: 'unset' }}>
                                     <CardActions>
                                         <Button size="large" onClick={() => handleButtonClick(false)} sx={{ ...tabBtnStyle(false) }}>Response</Button>
                                         <Button size="large" onClick={() => handleButtonClick(true)} sx={{ ...tabBtnStyle(true) }}>Source</Button>
@@ -477,10 +507,10 @@ export default function ResponsiveSearchContainerV2() {
                                         <Typography gutterBottom variant="h5" component="div">
                                             Results:
                                         </Typography>
-                                        <Typography variant="h6" sx={{ fontWeight: 400, color: '#1565b3', }}>
+                                        <Typography variant="h6" sx={{ fontWeight: 400, color: '#00008B', }}>
                                             Search Result ({queryResData.response_id})
                                         </Typography>
-                                        <Typography variant="h6" sx={{ fontWeight: 300, color: '#000', opacity: 0.9, fontSize: '1.35rem' }}>
+                                        <Typography variant="h6" sx={{ fontWeight: 300, color: '#000', fontSize: '1.35rem' }}>
                                             {queryResData.query_response}
                                         </Typography>
                                     </CardContent>}
@@ -488,10 +518,10 @@ export default function ResponsiveSearchContainerV2() {
                                         <Typography gutterBottom variant="h5" component="div">
                                             References:
                                         </Typography>
-                                        <Typography variant="h6" sx={{ fontWeight: 400, color: '#1565b3' }}>
+                                        <Typography variant="h6" sx={{ fontWeight: 400, color: '#00008B' }}>
                                             Data sources ({queryResData.response_id})
                                         </Typography>
-                                        <Typography variant="h6" sx={{ fontWeight: 300, color: '#000', opacity: 0.9, fontSize: '1.35rem' }} >
+                                        <Typography variant="h6" sx={{ fontWeight: 300, color: '#000', fontSize: '1.35rem' }} >
                                             <div dangerouslySetInnerHTML={{ __html: queryResData.source_data }}></div>
                                         </Typography>
                                     </CardContent>}
