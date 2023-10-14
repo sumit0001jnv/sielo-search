@@ -32,7 +32,7 @@ export default function Loader() {
                     <li></li>
                 </ul>
             </div>
-            <Typography variant="h4" sx={{ color: '#fff', pl: 1, mt: 3 }}>Loading...</Typography>
+            <Typography variant="h4" sx={{ color: '#fff', pl: 1, mt: 3 }}>Searching...</Typography>
 
         </Box>
 
