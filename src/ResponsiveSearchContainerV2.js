@@ -47,6 +47,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
+import Loader from './Loader';
 
 const lightColors = [
     '#FFDB58',
@@ -467,9 +468,7 @@ export default function ResponsiveSearchContainerV2() {
                                 </Box>
                             </Box>
                         </form>
-                        {(isLoading) && <Box sx={{ width: '100%', p: 2, px: 0 }}>
-                            <Skeleton variant="rectangular" animation="pulse" sx={{ mb: 2, width: '100%', background: '#DBF3FA', opacity: 0.6, borderRadius: '8px' }} height={200} />
-                        </Box>}
+                        {(isLoading) && <Loader></Loader>}
                         {!isLoading && !queryResData && <>
                             <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: 'calc(100vh - 240px)' }}>
                                 <Grid container sx={{ width: '100%', display: 'flex', rowGap: "8px", p: 2 }}>
