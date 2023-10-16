@@ -1,12 +1,12 @@
 .book {
-    --color: #fff;
+    --color: #37474f;
     --duration: 6.8s;
     width: 32px;
     height: 12px;
     position: relative;
     margin: 32px 0 0 0;
     //Demo
-    zoom: 1.5;
+    zoom: 0.6;
     .inner {
         width: 32px;
         height: 12px;
@@ -19,14 +19,14 @@
             width: 60px;
             height: 4px;
             top: 0;
-            border-radius: 2px;
+            border-radius: 1px;
             background: var(--color);
             position: absolute;
             &:before {
                 content: '';
                 width: 48px;
                 height: 4px;
-                border-radius: 2px;
+                border-radius: 1px;
                 background: inherit;
                 position: absolute;
                 top: -10px;
@@ -63,7 +63,7 @@
         top: 0;
         li {
             height: 4px;
-            border-radius: 2px;
+            border-radius: 1px;
             transform-origin: 100% 2px;
             width: 48px;
             right: 0;

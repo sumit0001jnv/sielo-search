@@ -105,12 +105,3 @@ code {
 .content {
   flex: 1;
 }
-
-.sample-card{
-  background-color: rgb(208 224 255);
-  cursor: pointer;
-}
-
-.sample-card:hover{
-  background-color: rgb(184, 119, 245);
-}
