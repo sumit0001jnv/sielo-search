@@ -4,11 +4,12 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import ResponsiveSearchContainer from './ResponsiveSearchContainer';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { useNavigate, Redirect,Navigate } from "react-router-dom";
+import { useNavigate, Redirect, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import SignIn from './SignIn';
 import SignUp from './SignUp';
+import NotFound from './NotFound';
 function App() {
   const navigate = useNavigate();
   const { isLogedIn, user } = useSelector((state) => state.login);
@@ -46,6 +47,7 @@ function App() {
       <Route path="/sign-up" exact element={<SignUp />} />
       <Route path="/search" exact element={<ResponsiveSearchContainer />} />
       <Route path="/" exact element={<Navigate to="/search" />} />
+      <Route path="*" exact element={<NotFound />} />
     </Routes>
   );
 }
