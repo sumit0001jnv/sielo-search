@@ -274,7 +274,7 @@ export default function ResponsiveSearchContainer() {
         //     setlogin(false);
         //     setUserName("");
         //     setUserCategory("");
-        //     localStorage.removeItem("pdf_parser_app");
+        //     localStorage.removeItem("sielo_search_app");
         //     dispatch(loginAction.logOut());
         //     dispatch(
         //       uiAction.showSnackbar({
@@ -327,7 +327,7 @@ export default function ResponsiveSearchContainer() {
         setOpenDrawer(false);
     };
 
-    const sampleCardClass = { backgroundColor: lightBlue[100], display: 'flex', flexDirection: 'column', p: 2, minHeight: '120px', borderRadius: '8px', mr: 2, '&:hover': { background: blue[200], cursor: 'pointer' } };
+    const sampleCardClass = { backgroundColor: lightBlue[100], display: 'flex', flexDirection: 'column', p: 2, minHeight: '120px', borderRadius: '8px', mr: 2, '&:hover': { background: blue[200], fontWeight: '500', cursor: 'pointer' } };
 
 
     return (

@@ -3,8 +3,8 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import ResponsiveSearchContainer from './ResponsiveSearchContainer';
-import { BrowserRouter as Router, Route,Routes, Link } from 'react-router-dom';
-import { useNavigate, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { useNavigate, Redirect,Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import SignIn from './SignIn';
@@ -43,9 +43,9 @@ function App() {
   return (
     <Routes>
       <Route path="/sign-in" exact element={<SignIn />} />
-      <Route path="/sign-up" exact element={<SignUp/>} />
-      <Route path="/search" exact element={<ResponsiveSearchContainer/>} />
-      <Route path="/" exact element={<ResponsiveSearchContainer/>} />
+      <Route path="/sign-up" exact element={<SignUp />} />
+      <Route path="/search" exact element={<ResponsiveSearchContainer />} />
+      <Route path="/" exact element={<Navigate to="/search" />} />
     </Routes>
   );
 }

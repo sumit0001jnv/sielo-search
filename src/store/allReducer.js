@@ -1,6 +1,6 @@
 import uiReducer from './uiReducer';
 import { combineReducers } from 'redux';
-const localStoreData = JSON.parse(localStorage.getItem('pdf_parser_app') || '{}')
+const localStoreData = JSON.parse(localStorage.getItem('sielo_search_app') || '{}')
 const initialState = {
     isLogedIn: localStoreData.isLogin,
     user: {

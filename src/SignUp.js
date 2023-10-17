@@ -12,6 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import Input from '@mui/material/Input';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import Visibility from '@mui/icons-material/Visibility';
@@ -61,43 +62,35 @@ export default function SignUp() {
     }
 
     const [formData, setformData] = useState({
-        username: '',
+        user_name: '',
         password: '',
-        email: '',
-        mobile_number: '',
+        email_id: '',
+        contact_num: '',
         org_name: '',
         _confirmPassword: '',
         _showPassword: false,
         _showConfirmPassword: false,
-        _isValid: true
+        _isValid: true,
+        org_url: ''
     });
     const [loading, setLoading] = useState(false);
     const onSubmit = (form) => {
-
-        // if(formData.password!==formData._confirmPassword){
-        //   dispatch(uiAction.showSnackbar({ type: 'error', message: 'password and confirm password must be same' }));
-        //   return;
-        // }
-
-        // if(!formData.password || !formData.username || !formData.email || !formData.org_name){
-        //   dispatch(uiAction.showSnackbar({ type: 'error', message: 'Manadatory field(s) missing' }));
-        // }
-
-        let bodyFormData = new FormData();
-        bodyFormData.append('username', form.username);
-        bodyFormData.append('email', form.email);
-        bodyFormData.append('password', form.password);
-        bodyFormData.append('mobile_number', form.mobile_number);
-        bodyFormData.append('org_name', form.org_name);
-
+        let data = {
+            'user_name': form.user_name,
+            'email_id': form.email_id,
+            'password': form.password,
+            'contact_num': form.contact_num,
+            'org_url': form.org_url,
+            'org_name': form.org_name
+        };
         setLoading(true);
         axios({
             method: "post",
-            url: `${process.env.REACT_APP_BASE_URL}/api/org-registration`,
-            data: bodyFormData,
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
+            url: `${process.env.REACT_APP_BASE_URL}/api/user-registration`,
+            data,
+            // headers: {
+            //     "Content-Type": "multipart/form-data",
+            // },
         })
             .then((res) => {
                 if (!res.data.status) {
@@ -133,14 +126,14 @@ export default function SignUp() {
     };
 
     const validationRules = {
-        email: {
+        email_id: {
             required: 'Email is required',
             pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                 message: 'Invalid email',
             },
         },
-        username: {
+        user_name: {
             required: 'Name is required',
         },
         org_name: {
@@ -161,7 +154,7 @@ export default function SignUp() {
             // },
             validate: (value) => value === watch('password') || 'Passwords do not match',
         },
-        mobile_number: {
+        contact_num: {
             required: 'Mobile number is required',
             // pattern: {
             //   value: /^[0-9]{10}$/,
@@ -171,13 +164,14 @@ export default function SignUp() {
     };
     return (
         <ThemeProvider theme={theme}>
-            <Grid container component="main" sx={{ minHeight: '100vh', justifyContent: 'center', backgroundColor: blue[50], p: 1 }}>
+            <Grid container component="main" sx={{ minHeight: '100vh', justifyContent: 'center', backgroundColor: blue[50] }}>
                 <CssBaseline />
-                <Grid item xs={12} sm={8} md={6} sx={{
+                <Grid xs={12} sm={8} md={5} sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    p: 3
+                    p: 3,
+                    mt: 2
                 }} component={Paper} elevation={1}>
                     <Badge
                         overlap="circular"
@@ -204,6 +198,7 @@ export default function SignUp() {
                             label="Organization Name"
                             name="org_name"
                             type="text"
+                            variant='standard'
                             autoFocus
                             sx={{ mr: 2 }}
                             value={formData.name}
@@ -218,33 +213,35 @@ export default function SignUp() {
                             margin="normal"
                             fullWidth
                             required
-                            id="username"
+                            id="user_name"
                             label="User Name"
-                            name="username"
+                            name="user_name"
+                            variant='standard'
                             type="text"
                             sx={{ mr: 2 }}
-                            {...register('username', {
-                                ...validationRules.username,
+                            {...register('user_name', {
+                                ...validationRules.user_name,
                             })}
-                            error={errors.username}
-                            helperText={errors.username && errors.username.message}
+                            error={errors.user_name}
+                            helperText={errors.user_name && errors.user_name.message}
                         />
                         <TextField
                             required
                             margin="normal"
                             fullWidth
-                            id="email"
+                            id="email_id"
                             label="Email Address"
-                            name="email"
-                            {...register('email', {
-                                ...validationRules.email,
+                            variant='standard'
+                            name="email_id"
+                            {...register('email_id', {
+                                ...validationRules.email_id,
                             })}
-                            error={errors.email}
-                            helperText={errors.email && errors.email.message}
+                            error={errors.email_id}
+                            helperText={errors.email_id && errors.email_id.message}
                         />
-                        <FormControl sx={{ mt: 2 }} variant="outlined" fullWidth>
+                        <FormControl sx={{ mt: 2 }} variant="standard" fullWidth>
                             <InputLabel htmlFor="outlined-adornment-password" required>Password</InputLabel>
-                            <OutlinedInput
+                            <Input
                                 fullWidth
                                 required
                                 name="password"
@@ -274,9 +271,9 @@ export default function SignUp() {
                             />
                             {errors.password && <span>{errors.password.message}</span>}
                         </FormControl>
-                        <FormControl sx={{ mt: 2 }} variant="outlined" fullWidth>
+                        <FormControl sx={{ mt: 2 }} variant="standard" fullWidth>
                             <InputLabel htmlFor="outlined-adornment-password" required>Confirm Password</InputLabel>
-                            <OutlinedInput
+                            <Input
                                 fullWidth
                                 name="confirm-password"
                                 label="Confirm Password"
@@ -303,23 +300,19 @@ export default function SignUp() {
                             />
                             {errors._confirmPassword && <span>{errors._confirmPassword.message}</span>}
                         </FormControl>
-                        {/* <MuiPhoneNumber
-              defaultCountry={"us"}
-              onChange={e => handleChange('mobile_number',e)}
-            /> */}
                         <TextField
                             margin="normal"
                             fullWidth
-                            
-                            id="mobile_number"
+                            id="contact_num"
                             label="Mobile No"
-                            name="mobile_number"
+                            name="contact_num"
                             type="number"
-                            {...register('mobile_number', {
-                                ...validationRules.mobile_number,
+                            variant="standard"
+                            {...register('contact_num', {
+                                ...validationRules.contact_num,
                             })}
-                            error={errors.mobile_number}
-                            helperText={errors.mobile_number && errors.mobile_number.message}
+                            error={errors.contact_num}
+                            helperText={errors.contact_num && errors.contact_num.message}
                         />
                         <TextField
                             margin="normal"
@@ -328,6 +321,7 @@ export default function SignUp() {
                             label="Organization URL"
                             name="org_url"
                             type="text"
+                            variant="standard"
                             autoFocus
                             sx={{ mr: 2 }}
                             value={formData.name}
@@ -357,7 +351,7 @@ export default function SignUp() {
                         </Grid>
                     </Box>
                 </Grid>
-                <Copyright sx={{ ...resultTextStyle, mt: 1, p: 1, width: '100%', order: 1, backgroundColor: blue['A100'], fontWeight: 400, color: '#000' }} />
+                <Copyright sx={{ ...resultTextStyle, mt: 1, p: 1, width: '100%', order: 1, backgroundColor: blue['100'], fontWeight: 400, color: '#000' }} />
             </Grid>
         </ThemeProvider>
     );

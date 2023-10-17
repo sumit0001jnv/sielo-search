@@ -16,6 +16,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
+import Input from '@mui/material/Input';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
@@ -48,25 +49,19 @@ export default function SignIn() {
   const dispatch = useDispatch();
   const [formData, setformData] = useState({ email: '', password: '', showPassword: false });
   useEffect(() => {
-    let userData = JSON.parse(localStorage.getItem('pdf_parser_app') || '{}');
+    let userData = JSON.parse(localStorage.getItem('sielo_search_app') || '{}');
   }, []);
   const handleSubmit = (event) => {
     event.preventDefault();
     let obj = { login: true, userName: '', pathname: '/', userCategory: '' }
-    let bodyFormData = new FormData();
-    bodyFormData.append('username', formData.email);
-    bodyFormData.append('password', formData.password);
+    let data = {
+      email_id: formData.email,
+      password: formData.password
+    };
     axios({
       method: 'post',
       url: process.env.REACT_APP_BASE_URL + "/api/user-login",
-      data: bodyFormData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      // data: {
-      //   username: formData.email,
-      //   password: formData.password
-      // }
+      data
     }).then(async res => {
       if (!res.data.status) {
         dispatch(uiAction.showSnackbar({ type: 'error', message: res.data.message }));
@@ -78,40 +73,24 @@ export default function SignIn() {
 
       dispatch(loginAction.logIn());
       dispatch(uiAction.showSnackbar({ type: 'success', message: res.data.message || 'User logged in successfully' }));
-      let store = localStorage.getItem('pdf_parser_app');
+      let store = localStorage.getItem('sielo_search_app');
       if (!store) {
-        localStorage.setItem('pdf_parser_app', '{}');
-        store = localStorage.getItem('pdf_parser_app');
+        localStorage.setItem('sielo_search_app', '{}');
+        store = localStorage.getItem('sielo_search_app');
       }
-      let parsedStore = JSON.parse(store);
-      parsedStore.userName = data.user_name;
-      parsedStore.isLogin = true;
-      parsedStore.userCategory = data.user_group;
-      parsedStore.user_id = data.user_uuid;
-      parsedStore.email = data.user_id;
-      parsedStore.token = data.token;
-      parsedStore.user_org_name = data.user_org_name;
-      parsedStore.user_org_logo_url = data.user_org_logo_url;
-      // await getProjectColorData(parsedStore);
-      dispatch(loginAction.setUser(parsedStore));
-      localStorage.setItem('pdf_parser_app', JSON.stringify(parsedStore));
-      await getOrgData(parsedStore);
-      await getProjectColorData(parsedStore);
-      localStorage.setItem('pdf_parser_app', JSON.stringify(parsedStore));
-      dispatch(loginAction.setUser(parsedStore));
-      console.error(parsedStore);
-      switch (parsedStore.userCategory) {
-        case 'super_admin': {
-          obj.pathname = '/organizations';
-          break;
-        }
-        default: {
-          obj.pathname = '/'
-        }
-      }
-      obj.userCategory = parsedStore.userCategory
+
+      // switch (parsedStore.userCategory) {
+      //   case 'super_admin': {
+      //     obj.pathname = '/organizations';
+      //     break;
+      //   }
+      //   default: {
+      //     obj.pathname = '/'
+      //   }
+      // }
+      // obj.userCategory = parsedStore.userCategory
       navigate({
-        pathname: obj.pathname,
+        pathname: '/search',
         state: obj
       })
     }).catch(err => {
@@ -177,12 +156,13 @@ export default function SignIn() {
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: blue[50] }}>
         <CssBaseline />
-        <Grid item xs={12} sm={8} md={5} sx={{ display: 'flex', flexDirection: 'column', p: 2,m:1 }} component={Paper} elevation={1}>
+        <Grid item xs={12} sm={8} md={5} sx={{ display: 'flex', flexDirection: 'column', p: 2, m: 1 }} component={Paper} elevation={1}>
           <Box
             sx={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
+              justifyContent: 'center',
               px: 6,
               py: 0,
               // boxShadow: 'rgb(0 0 0 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;'
@@ -204,29 +184,23 @@ export default function SignIn() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                variant='standard'
                 value={formData.email}
                 onChange={handleChange('email')}
               />
-              <FormControl sx={{ mt: 2 }} variant="outlined" fullWidth>
-                <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                <OutlinedInput
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
+              <FormControl sx={{ mt: 2 }} variant="standard" fullWidth>
+                <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+                <Input
+                  id="standard-adornment-password"
                   type={formData.showPassword ? 'text' : 'password'}
-                  id="password"
-                  autoComplete="current-password"
                   value={formData.password}
                   onChange={handleChange('password')}
-
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
                         onClick={handleClickShowPassword('showPassword')}
                         onMouseDown={handleMouseDownPassword}
-                        edge="end"
                       >
                         {formData.showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
@@ -248,7 +222,7 @@ export default function SignIn() {
               </Button>
             </Box>
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'end', px: 2,pb:2 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'end', px: 2, pb: 2 }}>
             <Grid item xs>
               <Link href="/#/forget-password" variant="body2">
                 Forgot password?
@@ -259,7 +233,7 @@ export default function SignIn() {
             </Link>
           </Box>
         </Grid>
-        <Copyright sx={{ ...resultTextStyle, mt: 'auto', p: 1, backgroundColor:  blue['A100'], fontWeight: 400, color: '#000', width: '100%' }} />
+        <Copyright sx={{ ...resultTextStyle, mt: 'auto', p: 1, backgroundColor: blue['100'], fontWeight: 400, color: '#000', width: '100%', textAlign: 'center' }} />
       </Grid>
 
     </ThemeProvider>
