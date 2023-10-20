@@ -9,11 +9,12 @@ import Databases from './Databases';
 import { useLocation, useNavigate, Navigate, Route, Routes } from "react-router-dom";
 import CustomSnackbar from "./snackbar/CustomSnackbar";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import NotFound from './NotFound';
 import Layout from './Layout';
+import AppContext from './context/AppContext' ;
 function App() {
   let location = useLocation();
   const [pathname, setPathname] = useState('');
@@ -51,24 +52,32 @@ function App() {
   useEffect(() => {
     console.log(location);
     setPathname(location.pathname);
-  }, [location])
+  }, [location]);
+  const [contextValue, setContextValue] = useState(false);
+  const updateContextValue = (newValue) => {
+    setContextValue(newValue);
+  };
   return (
+    
     <>
-      {!['/sign-in', '/sign-up'].includes(pathname) && <Header></Header>}
-      <Routes>
-        <Route path="/sign-in" exact element={<SignIn />} />
-        <Route path="/sign-up" exact element={<SignUp />} />
-        <Route path="/search" exact element={<ResponsiveSearchContainer />} />
-        <Route path="/credentials" exact element={<Credentials />} />
-        <Route path="/databases" exact element={<Databases />} />
-        <Route path="/layout" exact element={<Layout />} >
-          <Route path="search" exact element={<ResponsiveSearchContainer />} />
-          <Route path="credentials" exact element={<Credentials />} />
-          <Route path="databases" exact element={<Databases />} />
-        </Route>
-        <Route path="/" exact element={<Navigate to="/search" />} />
-        <Route path="*" exact element={<NotFound />} />
-      </Routes>
+      <AppContext.Provider value={{ contextValue, updateContextValue }}>
+        {!['/sign-in', '/sign-up'].includes(pathname) && <Header></Header>}
+        <Routes>
+          <Route path="/sign-in" exact element={<SignIn />} />
+          <Route path="/sign-up" exact element={<SignUp />} />
+          {/* <Route path="/search" exact element={<ResponsiveSearchContainer />} />
+          <Route path="/credentials" exact element={<Credentials />} />
+          <Route path="/databases" exact element={<Databases />} /> */}
+          <Route path="/layout" exact element={<Layout />} >
+            <Route path="search" exact element={<ResponsiveSearchContainer />} />
+            <Route path="credentials" exact element={<Credentials />} />
+            <Route path="databases" exact element={<Databases />} />
+          </Route>
+          <Route path="/" exact element={<Navigate to="/search" />} />
+          <Route path="*" exact element={<NotFound />} />
+        </Routes>
+      </AppContext.Provider>
+
       <CustomSnackbar />
     </>
   );

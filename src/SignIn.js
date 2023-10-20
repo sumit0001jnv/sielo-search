@@ -86,7 +86,7 @@ export default function SignIn() {
       // }
       // obj.userCategory = parsedStore.userCategory
       navigate({
-        pathname: '/search',
+        pathname: '/layout/search',
         state: obj
       })
     }).catch(err => {

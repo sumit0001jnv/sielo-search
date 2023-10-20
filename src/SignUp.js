@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -11,6 +12,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+
 import Container from '@mui/material/Container';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Input from '@mui/material/Input';
@@ -44,6 +46,7 @@ const theme = createTheme();
 export default function SignUp() {
     const isMobile = useMediaQuery('(max-width:600px)');
     const dispatch = useDispatch();
+     const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -53,15 +56,6 @@ export default function SignUp() {
     } = useForm({
         mode: 'onChange', // Enable live validation
     });
-
-    const resultTextStyle = {
-        fontSize: '1rem',
-        fontWeight: '400',
-        lineHeight: '1.5rem',
-        fontFamily: 'Google Sans, Helvetica Neue, sans - serif',
-        letterSpacing: 'normal',
-        whiteSpace: 'pre - wrap',
-    }
 
     const [formData, setformData] = useState({
         user_name: '',
@@ -101,6 +95,7 @@ export default function SignUp() {
                 }
                 setLoading(false);
                 reset();
+                navigate('/sign-in')
                 dispatch(uiAction.showSnackbar({ type: 'success', message: res?.data?.message || 'User registered Successfuly!!!' }));
             })
             .catch((err) => {

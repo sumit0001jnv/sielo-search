@@ -6,7 +6,7 @@ import { ThemeProvider } from '@mui/material';
 import { blue, blueGrey, lightBlue, grey } from '@mui/material/colors';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import loginAction from '../store/actions/loginAction';
 import uiAction from '../store/actions/uiAction';
 import Badge from '@mui/material/Badge';
@@ -17,7 +17,7 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from "@mui/material/MenuItem";
-
+import AppContext from '../context/AppContext';
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     alignItems: 'center',
     paddingTop: theme.spacing(1),
@@ -79,15 +79,16 @@ const AppBar = styled(MuiAppBar, {
 
 export default function Header() {
     const theme = useTheme();
+    const { contextValue, updateContextValue } = useContext(AppContext);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const isMobile = useMediaQuery('(max-width:600px)');
-    const [openDrawer, setOpenDrawer] = useState(false);
     const [login, setlogin] = useState(true);
+    const [userName, setUserName] = useState("");
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const toggleDrawerOpen = () => {
-        setOpenDrawer(!openDrawer);
+        updateContextValue(!contextValue);
     };
     const handleClick = (event, type) => {
         if (type === 'notification-menu') {
@@ -133,10 +134,26 @@ export default function Header() {
         if (storage) {
             const jsonStorage = JSON.parse(storage);
             setlogin(!!jsonStorage.isLoggedIn)
-        }else{
+        } else {
             setlogin(false)
         }
     }, [])
+    useEffect(() => {
+        const storage = localStorage.getItem("sielo_search_app");
+        if (storage) {
+            const jsonStorage = JSON.parse(storage);
+            setUserName(jsonStorage.user_name || '');
+        } else {
+            setlogin(false)
+        }
+    }, [localStorage.getItem("sielo_search_app")]);
+    const abbreviateWord = (word = "") => {
+        let abbrWord = "";
+        word
+            .split(" ")
+            .forEach((w) => (abbrWord = abbrWord + (w[0] || "").toUpperCase()));
+        return abbrWord;
+    };
     return (
         <ThemeProvider theme={theme}>
             <AppBar position="fixed" style={{ zIndex: 1100 }} sx={{ boxShadow: '-1px -20px 0px 0px rgba(0,0,0,0.2), -1px 0px 4px 2px rgba(0,0,0,0.14), 0px -20px 0px 0px rgba(0,0,0,0.12)' }}>
@@ -159,7 +176,7 @@ export default function Header() {
                             onClick={(event) => handleClick(event, 'login')}
                         >
                             <Avatar sx={{ bgcolor: blue[500] }}>
-                                SK
+                                {abbreviateWord(userName)}
                             </Avatar>
                         </StyledBadge>
                     </Box>

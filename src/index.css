@@ -105,3 +105,5 @@ code {
 .content {
   flex: 1;
 }
+
+iframe#webpack-dev-server-client-overlay{display:none!important}
