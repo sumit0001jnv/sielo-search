@@ -1,4 +1,6 @@
 import { styled } from '@mui/material/styles';
+import { Outlet } from "react-router-dom";
+
 // import AppBar from '@mui/material/AppBar';
 ///////////
 import MuiAppBar from '@mui/material/AppBar';
@@ -154,8 +156,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-
-export default function ResponsiveSearchContainer() {
+export default function Layout() {
     const theme = useTheme();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -232,6 +233,46 @@ export default function ResponsiveSearchContainer() {
     };
     const open = Boolean(anchorEl);
 
+    const handleClick = (event, type) => {
+        if (type === 'notification-menu') {
+            //   setNotificationAnchorEl(event.currentTarget);
+
+        } else {
+            setAnchorEl(event.currentTarget);
+        }
+    };
+    const handleClose = (type) => (eventType) => {
+        setAnchorEl(null);
+        switch (type) {
+            //   case "login": {
+            //     navigate("/sign-in");
+            //     break;
+            //   }
+            case "logout": {
+                navigate("/sign-in");
+                localStorage.setItem("sielo_search_app", '{}');
+                dispatch(loginAction.logOut());
+                dispatch(
+                    uiAction.showSnackbar({
+                        message: "User logged out successfully",
+                        type: "info",
+                    })
+                );
+                break;
+            }
+            case "profile": {
+                navigate("/profile");
+                break;
+            }
+            case "notification": {
+                break;
+            }
+            default: {
+                // history.push("/");
+            }
+        }
+    };
+
     const tabBtnStyle = (isSource) => {
         if ((isSource && isSourceSelected) || (!isSource && !isSourceSelected)) {
             return { textDecoration: 'underline', fontSize: '14px', color: blue['A700'], 'text-underline-offset': '4px', fontWeight: 600 };
@@ -273,130 +314,59 @@ export default function ResponsiveSearchContainer() {
         navigate(path);
     }
     return (
-        <Box sx={{ borderRadius: 2, flexGrow: 1, display: 'flex', flexDirection: 'column', padding: '0' }}>
+        <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <form onSubmit={handleSearch}>
-                <Box className="search-container" sx={{ width: '100%', flex: 12, display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'center', alignItems: isMobile ? 'flex-start' : 'center', boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.2);', backgroundColor: "#fff", p: 1, rowGap: 1 }}>
-                    <OutlinedInput
-                        id="search-box" margin="normal"
-                        placeholder="Search"
-                        autoComplete="off"
-                        inputRef={textFieldRef}
-                        endAdornment={<InputAdornment position="end"><SearchIcon sx={{ fontSize: 30, color: '#797EF6' }} /></InputAdornment>}
-                        variant="outlined"
-                        value={searchText}
-                        // InputProps={{
-                        //     style: inputStyle,
-                        // }}
-                        maxRows={5}
-                        multiline
-                        onClick={handleOpenMenu}
-                        sx={{ ...resultTextStyle, flex: isMobile ? 12 : 8, background: "#fff", borderRadius: '8px', width: isMobile ? "100%" : "80%", my: 0, mr: isMobile ? 0 : 1 }}
-                        onChange={(e) => setSearchText(e.target.value)}
-                        onKeyDown={handleSearchKeyPress}
-                    />
-                    <Box sx={{ zIndex: 2, my: 0, display: 'flex', flex: isMobile ? 12 : 4, width: '100%', justifyContent: 'start', alignItems: 'center' }}>
-
-                        <Autocomplete
-                            id="three-options-autocomplete"
-                            options={options}
-                            getOptionLabel={(option) => option.label}
-                            value={selectedValue}
-                            onChange={handleSelectChange}
-                            sx={{
-                                width: isMobile ? '100%' : '300px', // Adjust the width as needed
-                                '& .MuiOutlinedInput-input': {
-                                    ...resultTextStyle,
-                                    padding: '10px', // Adjust the padding as needed
-                                },
-                                borderRadius: '8px',
-                                background: '#fff', mr: 1
-                            }}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    id="autocomplete-text-field"
-                                    placeholder="Select a database type"
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            )}
-                        />
-                        <ThemeProvider theme={buttonTheme}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={handleSearch}
-                                sx={{ borderRadius: '8px', p: 2, px: 3 }}
-                                disableElevation
-                            >
-                                Search
-                            </Button>
-                        </ThemeProvider>
-                    </Box>
+            <Drawer
+                sx={{
+                    width: isMobile ? '90vw' : drawerWidth,
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        width: isMobile ? '90vw' : drawerWidth,
+                        marginTop: '73px',
+                        boxSizing: 'border-box',
+                    },
+                }}
+                variant={isMobile ? "temporary" : "persistent"}
+                anchor="left"
+                open={openDrawer}
+            >
+                <DrawerHeader>
+                    <IconButton onClick={handleDrawerClose}>
+                        {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                    </IconButton>
+                </DrawerHeader>
+                <Divider />
+                <List>
+                    {menuObject.map((obj, index) => (
+                        <ListItem key={obj.name} disablePadding>
+                            <ListItemButton onClick={() => selectMenu(obj.path)}>
+                                <ListItemIcon>
+                                    {<obj.icon />}
+                                </ListItemIcon>
+                                <ListItemText primary={obj.name} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
+                </List>
+            </Drawer>
+            <Main open={openDrawer} isMobile={isMobile}>
+                <DrawerHeader>
+                </DrawerHeader>
+                <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                    {!isMobile && !openDrawer && <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="end"
+                        onClick={toggleDrawerOpen}
+                        sx={{ mr: 1, color: blueGrey[900] }}
+                    >
+                        <MenuIcon sx={{ fontSize: 30 }} />
+                    </IconButton>}
+                    <Outlet />
                 </Box>
-            </form>
-            {(isLoading) && <Loader></Loader>}
-            {!isLoading && !queryResData && <>
-                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: 'calc(100vh - 240px)' }}>
-                    <Grid container sx={{ width: '100%', display: 'flex', rowGap: "8px", p: 2 }}>
-                        <Grid item xs="12" sm="4" md="4">
-                            <Box onClick={() => searchCard('Summarize the data')} sx={{ ...sampleCardClass }}>
-                                <Box sx={{ fontSize: '1.25rem', pb: 2, }}>Summarize the data</Box>
-                                <Box sx={{ opacity: 0.5 }}>To get short summary </Box>
-                            </Box>
-                        </Grid>
-                        <Grid item xs="12" sm="4" md="4">
-                            <Box onClick={() => searchCard('List all the medicines')} sx={{ ...sampleCardClass }}>
-                                <Box sx={{ fontSize: '1.25rem', pb: 2 }}>List all the medicines</Box>
-                                <Box sx={{ opacity: 0.5 }}>Query to listout all the medicines</Box>
-                            </Box>
-                        </Grid>
-                        <Grid item xs="12" sm="4" md="4">
-                            <Box onClick={() => searchCard('Find all the proteins')} sx={{ ...sampleCardClass }}>
-                                <Box sx={{ fontSize: '1.25rem', pb: 2 }}>Find all the proteins</Box>
-                                <Box sx={{ opacity: 0.5 }}>Query to listout all the proteins</Box>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                    <img onClick={focusTextField} className='image-container-left' src="/dbms.png" width="220" height="201" alt='img'></img>
-                    <Typography onClick={focusTextField} sx={{ color: '#000', opacity: 0.5, fontSize: '20px' }}>Try Search on top</Typography>
-                </Box>
-            </>}
-            {!isLoading && queryResData &&
-                <>
-                    <Card sx={{ mt: 1, background: lightBlue['100'], boxShadow: 'unset' }}>
-                        <CardActions>
-                            <Button size="large" onClick={() => handleButtonClick(false)} sx={{ ...tabBtnStyle(false) }}>Response</Button>
-                            <Button size="large" onClick={() => handleButtonClick(true)} sx={{ ...tabBtnStyle(true) }}>Source</Button>
-                        </CardActions>
-                        {!isSourceSelected && <CardContent>
-                            <Typography gutterBottom variant="h5" component="div" sx={{ ...resultTextStyle, fontSize: '1.25rem' }}>
-                                Results:
-                            </Typography>
-                            <Typography variant="h6" sx={{ ...resultTextStyle, fontWeight: 400, color: blue['A400'], }}>
-                                Search Result ({queryResData.response_id})
-                            </Typography>
-                            <Typography variant="h6" sx={{ ...resultTextStyle }}>
-                                {queryResData.query_response}
-                            </Typography>
-                        </CardContent>}
-                        {isSourceSelected && <CardContent>
-                            <Typography gutterBottom variant="h5" component="div" sx={{ ...resultTextStyle, fontSize: '1.25rem' }}>
-                                References:
-                            </Typography>
-                            <Typography variant="h6" sx={{ ...resultTextStyle, fontWeight: 400, color: blue['A400'] }}>
-                                Data sources ({queryResData.response_id})
-                            </Typography>
-                            <Typography variant="h6" sx={{ ...resultTextStyle }} >
-                                <div dangerouslySetInnerHTML={{ __html: queryResData.source_data }}></div>
-                            </Typography>
-                        </CardContent>}
 
-                    </Card>
-                </>
-            }
+
+            </Main>
         </Box>
-
     );
 }

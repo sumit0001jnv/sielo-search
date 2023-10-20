@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -41,6 +42,7 @@ function Copyright(props) {
 }
 const theme = createTheme();
 export default function SignUp() {
+    const isMobile = useMediaQuery('(max-width:600px)');
     const dispatch = useDispatch();
     const {
         register,
@@ -171,7 +173,7 @@ export default function SignUp() {
                     flexDirection: 'column',
                     alignItems: 'center',
                     p: 3,
-                    mt: 2
+                    m: isMobile ? 1 : 3
                 }} component={Paper} elevation={1}>
                     <Badge
                         overlap="circular"
@@ -337,7 +339,7 @@ export default function SignUp() {
                         >
                             Create User
                         </Button>
-                        <Grid container>
+                        <Grid container sx={{ mt: 4 }}>
                             <Grid item xs>
                                 <Link href="/#/forget-password" variant="body2">
                                     Forgot password?
@@ -351,7 +353,7 @@ export default function SignUp() {
                         </Grid>
                     </Box>
                 </Grid>
-                <Copyright sx={{ ...resultTextStyle, mt: 1, p: 1, width: '100%', order: 1, backgroundColor: blue['100'], fontWeight: 400, color: '#000' }} />
+                {/* <Copyright sx={{ ...resultTextStyle, mt: 1, p: 1, width: '100%', order: 1, backgroundColor: blue['100'], fontWeight: 400, color: '#000' }} /> */}
             </Grid>
         </ThemeProvider>
     );

@@ -28,6 +28,7 @@ import { useDispatch } from 'react-redux';
 import loginAction from './store/actions/loginAction';
 import uiAction from './store/actions/uiAction';
 import { blue, grey } from "@mui/material/colors";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 function Copyright(props) {
   return (
@@ -44,7 +45,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn() {
-
+  const isMobile = useMediaQuery('(max-width:600px)');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setformData] = useState({ email: '', password: '', showPassword: false });
@@ -67,17 +68,12 @@ export default function SignIn() {
         dispatch(uiAction.showSnackbar({ type: 'error', message: res.data.message }));
         return;
       }
-
       const data = res.data.user_data;
       obj.userName = data.user_name;
-
+      localStorage.setItem('sielo_search_app', JSON.stringify({ ...data, isLoggedIn: true }));
       dispatch(loginAction.logIn());
       dispatch(uiAction.showSnackbar({ type: 'success', message: res.data.message || 'User logged in successfully' }));
-      let store = localStorage.getItem('sielo_search_app');
-      if (!store) {
-        localStorage.setItem('sielo_search_app', '{}');
-        store = localStorage.getItem('sielo_search_app');
-      }
+
 
       // switch (parsedStore.userCategory) {
       //   case 'super_admin': {
@@ -154,9 +150,9 @@ export default function SignIn() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: blue[50] }}>
+      <Grid container component="main" sx={{  height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: blue[50] }}>
         <CssBaseline />
-        <Grid item xs={12} sm={8} md={5} sx={{ display: 'flex', flexDirection: 'column', p: 2, m: 1 }} component={Paper} elevation={1}>
+        <Grid item xs={12} sm={5} md={5} sx={{ display: 'flex', flexDirection: 'column', p: 2, m: isMobile ? 1 : 4 }} component={Paper} elevation={1}>
           <Box
             sx={{
               display: 'flex',
@@ -222,7 +218,7 @@ export default function SignIn() {
               </Button>
             </Box>
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'end', px: 2, pb: 2 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'end', px: 2, py: 3 }}>
             <Grid item xs>
               <Link href="/#/forget-password" variant="body2">
                 Forgot password?
@@ -233,7 +229,7 @@ export default function SignIn() {
             </Link>
           </Box>
         </Grid>
-        <Copyright sx={{ ...resultTextStyle, mt: 'auto', p: 1, backgroundColor: blue['100'], fontWeight: 400, color: '#000', width: '100%', textAlign: 'center' }} />
+        {/* <Copyright sx={{ ...resultTextStyle, mt: 'auto', p: 1, backgroundColor: blue['100'], fontWeight: 400, color: '#000', width: '100%', textAlign: 'center', position: 'absolute', bottom: 0 }} /> */}
       </Grid>
 
     </ThemeProvider>
